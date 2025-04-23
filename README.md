@@ -62,4 +62,95 @@ MaGia(FK) Tham chiếu đến bảng GiaVe bằng cột MaGia của bảng VeXe 
 MaGia(FK)
 ![image](https://github.com/user-attachments/assets/6ff8b053-9819-4ae5-b967-d1a7bdffb1c7)
 # B. Nội dung Bài tập 05:
+## 1. Thêm trường phi chuẩn TongTien cho bảng VeXe
+![image](https://github.com/user-attachments/assets/de1f9105-236e-47a7-bd25-1403033660f1)
+Bảng VeXe sau khi thêm trường phi chuẩn TongTien ( tổng tiền )
+![image](https://github.com/user-attachments/assets/9844422b-aa5f-4e24-b697-7006743d2bad)
+## 2. Nhập thông tin demo cho các bảng
+Bảng KhachHang
+![image](https://github.com/user-attachments/assets/f2b1f791-f7bd-4211-b065-b9c787120382)
+Bảng NhanVien
+![image](https://github.com/user-attachments/assets/1219166a-2d8f-43ed-a501-92ba12e562a2)
+Bảng GiaVe
+![image](https://github.com/user-attachments/assets/ab495ea0-fd2a-42d5-b16a-0e6772756183)
+Bảng Xe
+![image](https://github.com/user-attachments/assets/c61fe149-fd77-499a-9655-1ae0c9e925a2)
+Bảng VeXe
+![image](https://github.com/user-attachments/assets/d210c499-205c-4a1e-b6c5-d004406c50cb)
+## 3. Viết trigger cho bảng VeXe
+![image](https://github.com/user-attachments/assets/b3cf18f3-4512-4a0f-a662-84a3099c9a83)
+code:
+```
+-- ================================================
+-- Template generated from Template Explorer using:
+-- Create Trigger (New Menu).SQL
+--
+-- Use the Specify Values for Template Parameters 
+-- command (Ctrl-Shift-M) to fill in the parameter 
+-- values below.
+--
+-- See additional Create Trigger templates for more
+-- examples of different Trigger statements.
+--
+-- This block of comments will not be included in
+-- the definition of the function.
+-- ================================================
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Lương Văn Học>
+-- Create date: <23/4/2025>
+-- Description:	<UpdateTongTien cho bảng VeXe>
+-- =============================================
+CREATE TRIGGER [dbo].[trg_UpdateTongTien]
+ON [dbo].[VeXe]
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Cập nhật TongTien cho các bản ghi có ThoiGianRa và MaGia hợp lệ
+    UPDATE v
+    SET v.TongTien = g.GiaTien * DATEDIFF(HOUR, v.ThoiGianVao, v.ThoiGianRa)
+    FROM [dbo].[VeXe] v
+    INNER JOIN inserted i ON v.MaVe = i.MaVe
+    INNER JOIN [dbo].[GiaVe] g ON v.MaGia = g.MaGia
+    WHERE i.ThoiGianRa IS NOT NULL
+      AND i.ThoiGianRa >= i.ThoiGianVao
+      AND i.MaGia IS NOT NULL;
+
+    -- Đặt TongTien = NULL nếu ThoiGianRa hoặc MaGia không hợp lệ
+    UPDATE v
+    SET v.TongTien = NULL
+    FROM [dbo].[VeXe] v
+    INNER JOIN inserted i ON v.MaVe = i.MaVe
+    WHERE i.ThoiGianRa IS NULL
+       OR i.MaGia IS NULL;
+END
+GO
+ALTER TABLE [dbo].[VeXe] ENABLE TRIGGER [trg_UpdateTongTien]
+GO
+```
+## 4. Nhập dữ liệu để test
+
+dòng có MaVe = VE004, ThoiGianVao = 2025-04-23 08:00:00, ThoiGianRa = NULL
+
+thay đổi cột ThoiGianRa thành: 2025-04-23 14:00:00
+
+và MaGia từ NULL->GIA002
+
+Nhấn Enter hoặc di chuyển con trỏ ra ngoài ô để lưu thay đổi.
+![image](https://github.com/user-attachments/assets/23b55723-4763-4e95-adf4-aac22a118fb2)
+Kết quả sau khi thay đổi
+Quan sát giá trị TongTien trong bảng VeXe. Nếu TongTien = 60.00, trigger hoạt động đúng.
+![image](https://github.com/user-attachments/assets/78cdb64e-ba5d-4865-b9f4-282af789c76f)
+## 5. Kết luận
+Trigger trg_UpdateTongTien trong đồ án quản lý bãi gửi xe thông minh tại Đại học Kỹ thuật Công nghiệp Thái Nguyên mang lại các lợi ích chính:
+- Tự động hóa: Tự tính TongTien dựa trên GiaTien và thời gian đỗ, giảm thao tác thủ công.
+- Nhất quán dữ liệu: Đảm bảo TongTien chính xác, chỉ cập nhật khi ThoiGianRa và MaGia hợp lệ.
+- Hiệu quả quản lý: Hỗ trợ thanh toán nhanh, báo cáo doanh thu, cải thiện trải nghiệm người dùng.
+- Tiết kiệm chi phí: Giảm công sức lập trình, bảo trì, phù hợp với hệ thống IoT và Smart City.
+- Thời gian thực: Tích hợp với cảm biến/camera, giảm tắc nghẽn giao thông.
 
