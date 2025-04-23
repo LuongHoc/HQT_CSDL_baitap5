@@ -61,5 +61,5 @@ MaGia(FK) Tham chiếu đến bảng GiaVe bằng cột MaGia của bảng VeXe 
 ## 5. Bảng GiaVe ( giá vé )
 MaGia(FK)
 ![image](https://github.com/user-attachments/assets/6ff8b053-9819-4ae5-b967-d1a7bdffb1c7)
-
+# B. Nội dung Bài tập 05:
 
