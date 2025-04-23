@@ -30,9 +30,13 @@ Hệ thống quản lý bãi gửi xe thông minh tại trường Đại học K
 # B. Cơ sở dữ liệu của hệ thống quản lý bãi gửi xe thông minh 
 Bảng 3NF:
 KhachHang(#MaKH, HoTen, SoDienThoai, DiaChi) 
+
 Xe(#BienSo, @MaKH,LoaiXe) 
+
 NhanVien (#MaNV,HoTen,SoDienThoai) 
-VeXe (#MaVe,@Bienso, @MaNV,ThoiGianVao, ThoiGianRa, TrangThai) 
+
+VeXe (#MaVe,@Bienso, @MaNV,@MaGia,ThoiGianVao, ThoiGianRa, TrangThai) 
+
 GiaVe (#MaGia, LoaiXe, GiaTien) 
 ## 1.Bảng KhachHang ( khách hàng )
 MaKH(PK)
@@ -40,7 +44,22 @@ MaKH(PK)
 ## 2.Bảng Xe ( thông tin xe )
 BienSo(PK)
 ![image](https://github.com/user-attachments/assets/3d651d46-9c47-4011-9478-cf1a8bf86eb2)
-MaKH(FK) 
+MaKH(FK) Tham chiếu đến bảng KhachHang bằng cột MaKH của bảng Xe và bảng KhachHang 
 ![image](https://github.com/user-attachments/assets/54610dca-a8cd-449b-a3fb-212328911b2a)
+## 3.Bảng NhanVien ( Nhân viên ) 
+MaNV(PK)
+![image](https://github.com/user-attachments/assets/2efbd7ca-a3bd-48e7-a657-6353c03e8fc5)
+## 4.Bảng VeXe ( vé xe )
+MaXe(PK)
+![image](https://github.com/user-attachments/assets/d8811a51-7871-489f-ad73-245b9363ef66)
+BienSo(FK) Tham chiếu đến bảng Xe bằng cột BienSo của bảng VeXe và bảng Xe
+![image](https://github.com/user-attachments/assets/87eff472-0662-44e9-bf52-038b92bf323f)
+MaNV(FK) Tham chiếu đến bảng NhanVien bằng cột BienSo của bảng VeXe và bảng Xe
+![image](https://github.com/user-attachments/assets/b85628c4-98ba-4858-af23-c01d3cd88a4f)
+MaGia(FK) Tham chiếu đến bảng GiaVe bằng cột MaGia của bảng VeXe và bảng GiaVe
+![image](https://github.com/user-attachments/assets/c9c6b6f2-b8ff-4dd8-a01c-1260e7f882ae)
+## 5. Bảng GiaVe ( giá vé )
+MaGia(FK)
+![image](https://github.com/user-attachments/assets/6ff8b053-9819-4ae5-b967-d1a7bdffb1c7)
 
 
